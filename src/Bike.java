@@ -17,6 +17,7 @@ public class Bike extends AbstractMovingEntity {
 	private String direction;
 	private String oldDirection;
 	private boolean isAlive;
+	private boolean speeding;
 
 	public Bike(double x, double y, double width, double height, float r, float g, float b, int lightTrailThicknessIn, String directionIn) {
 		super(x, y, width, height, r, g, b);
@@ -28,6 +29,7 @@ public class Bike extends AbstractMovingEntity {
 		currentLT = 0;
 		changedDirection = false;
 		setUpInitialSettings(directionIn);
+		speeding = false;
 	}
 	
 	private void setUpInitialSettings(String dIn) {
@@ -79,21 +81,37 @@ public class Bike extends AbstractMovingEntity {
 				if (up || down) {
 					if (up && !direction.equals("DOWN")) {
 						if(direction.equals("UP")) {
-							setDX(0);
-							setDY(-.2);
+							if(speeding) {
+								setDX(0);
+								setDY(-.1);
+								speeding = false;
+							} else {
+								setDX(0);
+								setDY(-.2);
+								speeding = true;
+							}
 						} else {
 							setDX(0);
 							setDY(-.1);
+							speeding = false;
 							oldDirection = direction;
 							direction = "UP";
 						}
 					} else if (down && !direction.equals("UP")) {
 						if(direction.equals("DOWN")) {
-							setDX(0);
-							setDY(.2);
+							if(speeding) {
+								setDX(0);
+								setDY(.1);
+								speeding = false;
+							} else {
+								setDX(0);
+								setDY(.2);
+								speeding = true;
+							}
 						} else {
 							setDX(0);
 							setDY(.1);
+							speeding = false;
 							oldDirection = direction;
 							direction = "DOWN";
 						}
@@ -103,21 +121,37 @@ public class Bike extends AbstractMovingEntity {
 				} else if(left || right) {
 					if (right && !direction.equals("LEFT")) {
 						if(direction.equals("RIGHT")) {
-							setDY(0);
-							setDX(.2);
+							if(speeding) {
+								setDY(0);
+								setDX(.1);
+								speeding = false;
+							} else {
+								setDY(0);
+								setDX(.2);
+								speeding = true;
+							}
 						} else {
 							setDY(0);
 							setDX(.1);
+							speeding = false;
 							oldDirection = direction;
 							direction = "RIGHT";
 						}
 					} else if (left && !direction.equals("RIGHT")) {
 						if(direction.equals("LEFT")) {
-							setDY(0);
-							setDX(-.2); 
+							if(speeding) {
+								setDY(0);
+								setDX(-.1);
+								speeding = false;
+							} else {
+								setDY(0);
+								setDX(-.2);
+								speeding = true;
+							} 
 						} else {
 							setDY(0);
 							setDX(-.1);
+							speeding = false;
 							oldDirection = direction;
 							direction = "LEFT";
 						}
