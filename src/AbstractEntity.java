@@ -1,6 +1,6 @@
 import java.awt.*;
 
-public abstract class AbstractThing implements Thing {	
+public abstract class AbstractEntity implements Entity {	
 	
 	private double x;
     private double y;
@@ -9,7 +9,7 @@ public abstract class AbstractThing implements Thing {
     private float[] color;
     private final Rectangle collisionBox = new Rectangle();
     
-    public AbstractThing(double xIn, double yIn, double widthIn, double heightIn, float r, float g, float b) {
+    public AbstractEntity(double xIn, double yIn, double widthIn, double heightIn, float r, float g, float b) {
         x = xIn;
         y = yIn;
         width = widthIn;
@@ -68,7 +68,7 @@ public abstract class AbstractThing implements Thing {
     }
 
     @Override
-    public boolean collidesWith(Thing other) {
+    public boolean collidesWith(Entity other) {
         collisionBox.setBounds((int) x, (int) y, (int) width, (int) height);
         return collisionBox.intersects(other.getX(), other.getY(), other.getWidth(), other.getHeight());
     }

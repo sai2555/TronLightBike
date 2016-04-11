@@ -1,10 +1,10 @@
 
-public abstract class AbstractMovingThing extends AbstractThing implements MovingThing {
+public abstract class AbstractMovingEntity extends AbstractEntity {
 
 	private double dx;
     private double dy;
 
-    public AbstractMovingThing(double x, double y, double width, double height, float r, float g, float b) {
+    public AbstractMovingEntity(double x, double y, double width, double height, float r, float g, float b) {
     	super(x, y, width, height, r, g, b);
         dx = 0;
         dy = 0;
@@ -42,11 +42,9 @@ public abstract class AbstractMovingThing extends AbstractThing implements Movin
     
     public boolean collisionDetection(int screenWidth, int screenHeight) {
     	if(horizontalBoundaryTouches(screenWidth)) {
-    		setDX(-getDX());
     		return true;
     	}
     	if(verticalBoundaryTouches(screenHeight)) {
-    		setDY(-getDY());
     	}
     	return false;
     }

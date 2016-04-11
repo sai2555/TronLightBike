@@ -1,5 +1,5 @@
 
-public interface Thing {
+public interface Entity {
 	public void draw();
     public void update(int delta);
     public void setLocation(double x, double y);
@@ -11,5 +11,5 @@ public interface Thing {
     public double getY();
     public double getHeight();
     public double getWidth();
-    public boolean collidesWith(Thing other);
+    public boolean collidesWith(Entity other);
 }

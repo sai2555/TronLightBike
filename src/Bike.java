@@ -1,30 +1,66 @@
 import static org.lwjgl.opengl.GL11.*;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 
-public class Bike extends AbstractMovingThing {
+import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.opengl.*;
+
+public class Bike extends AbstractMovingEntity {
 
 	private ArrayList<Trail> lightTrail;
 	private int currentLT;
 	private boolean upDown;
-	private final int LT_THICKNESS = 4;
+	private final int LT_THICKNESS;
 	private boolean changedDirection;
 	private String direction;
 	private String oldDirection;
 	private boolean isAlive;
 
-	public Bike(double x, double y, double width, double height, float r, float g, float b) {
+	public Bike(double x, double y, double width, double height, float r, float g, float b, int lightTrailThicknessIn, String directionIn) {
 		super(x, y, width, height, r, g, b);
+		LT_THICKNESS = lightTrailThicknessIn;
 		isAlive = true;
-		setDY(-.1);
-		direction = "UP";
-		oldDirection = "UP";
-		upDown = true;
+		direction = directionIn;
+		oldDirection = directionIn;
 		lightTrail = new ArrayList<Trail>();
 		currentLT = 0;
-		lightTrail.add(new Trail(getX() + getWidth() / 2 - LT_THICKNESS / 2, getY() + getHeight(), LT_THICKNESS, 0, getR(),
-				getG(), getB()));
 		changedDirection = false;
+		setUpInitialSettings(directionIn);
+	}
+	
+	private void setUpInitialSettings(String dIn) {
+		switch(dIn) {
+		case "DOWN":
+			setDY(0.1);
+			setDX(0.0);
+			upDown = true;
+			lightTrail.add(new Trail(getX() + getWidth() / 2 - LT_THICKNESS / 2,
+					getY() + getHeight() / 2 + LT_THICKNESS / 2, LT_THICKNESS, 0, getR(), getG(), getB()));
+			break;
+		case "UP":
+			setDY(-0.1);
+			setDX(0.0);
+			upDown = true;
+			lightTrail.add(new Trail(getX() + getWidth() / 2 - LT_THICKNESS / 2,
+					getY() + getHeight() / 2 + LT_THICKNESS / 2, LT_THICKNESS, 0, getR(), getG(), getB()));
+			break;
+		case "RIGHT":
+			setDX(0.1);
+			setDY(0.0);
+			upDown = false;
+			lightTrail.add(new Trail(getX() + getWidth() / 2 - LT_THICKNESS / 2,
+					getY() + getHeight() / 2 - LT_THICKNESS, 0, LT_THICKNESS, getR(), getG(), getB()));
+			break;
+		default:
+			setDX(-0.1);
+			setDY(0.0);
+			upDown = false;
+			lightTrail.add(new Trail(getX() + getWidth() / 2 + LT_THICKNESS / 2,
+					getY() + getHeight() / 2 - LT_THICKNESS / 2, 0, LT_THICKNESS, getR(), getG(), getB()));
+			break;
+		}
 	}
 
 	@Override
@@ -36,35 +72,59 @@ public class Bike extends AbstractMovingThing {
 	}
 
 	public void drive(boolean up, boolean down, boolean right, boolean left) {
+		if(!up && !down && !right && !left) return;
 		if(isAlive) {
-			if (up || down) {
-				if (up && !direction.equals("DOWN")) {
-					setDX(0);
-					setDY(-.1);
-					oldDirection = direction;
-					direction = "UP";
-				} else if (down && !direction.equals("UP")) {
-					setDX(0);
-					setDY(.1);
-					oldDirection = direction;
-					direction = "DOWN";
+			if(((direction.equals("UP") || direction.equals("DOWN")) && lightTrail.get(currentLT).getHeight() > getWidth() / 2) || 
+					(((direction.equals("RIGHT") || direction.equals("LEFT")) && lightTrail.get(currentLT).getWidth() > getWidth() / 2))) {
+				if (up || down) {
+					if (up && !direction.equals("DOWN")) {
+						if(direction.equals("UP")) {
+							setDX(0);
+							setDY(-.2);
+						} else {
+							setDX(0);
+							setDY(-.1);
+							oldDirection = direction;
+							direction = "UP";
+						}
+					} else if (down && !direction.equals("UP")) {
+						if(direction.equals("DOWN")) {
+							setDX(0);
+							setDY(.2);
+						} else {
+							setDX(0);
+							setDY(.1);
+							oldDirection = direction;
+							direction = "DOWN";
+						}
+					}
+					changedDirection = (!upDown) ? true : false;
+					upDown = true;
+				} else if(left || right) {
+					if (right && !direction.equals("LEFT")) {
+						if(direction.equals("RIGHT")) {
+							setDY(0);
+							setDX(.2);
+						} else {
+							setDY(0);
+							setDX(.1);
+							oldDirection = direction;
+							direction = "RIGHT";
+						}
+					} else if (left && !direction.equals("RIGHT")) {
+						if(direction.equals("LEFT")) {
+							setDY(0);
+							setDX(-.2); 
+						} else {
+							setDY(0);
+							setDX(-.1);
+							oldDirection = direction;
+							direction = "LEFT";
+						}
+					}
+					changedDirection = (upDown) ? true : false;
+					upDown = false;
 				}
-				changedDirection = (!upDown) ? true : false;
-				upDown = true;
-			} else if(left || right) {
-				if (right && !direction.equals("LEFT")) {
-					setDY(0);
-					setDX(.1);
-					oldDirection = direction;
-					direction = "RIGHT";
-				} else if (left && !direction.equals("RIGHT")) {
-					setDY(0);
-					setDX(-.1);
-					oldDirection = direction;
-					direction = "LEFT";
-				}
-				changedDirection = (upDown) ? true : false;
-				upDown = false;
 			}
 		}
 	}

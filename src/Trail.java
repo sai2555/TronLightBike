@@ -1,7 +1,7 @@
 import static org.lwjgl.opengl.GL11.glColor3f;
 import static org.lwjgl.opengl.GL11.glRectd;
 
-public class Trail extends AbstractThing {
+public class Trail extends AbstractEntity {
 	
 	public Trail(double x, double y, double width, double height, float r, float g, float b) {
 		super(x, y, width, height, r, g, b);
