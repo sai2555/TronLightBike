@@ -23,6 +23,7 @@ public class TronGame {
     private static long lastFrame;
     private static ArrayList<Bike> bikes;
     private static int gameState = 1;
+    private static Texture texture;
 
     public static void main(String[] args) {
         setUpDisplay();
@@ -30,7 +31,7 @@ public class TronGame {
         while (!Display.isCloseRequested()) {
            switch(gameState) {
 	           case 1:
-	        	   Menu.run();
+	        	   displayScreen("menuImage");
 	        	   setUpEntities();
 	               setUpTimer();
 	        	   gameState = 2;
@@ -46,6 +47,70 @@ public class TronGame {
        System.exit(1);
     }
     
+    public static void displayScreen(String textureName) {
+    	try {
+            Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
+            Display.setTitle("Tron Light Bike");
+
+        } catch (LWJGLException e) {
+            e.printStackTrace();
+            Display.destroy();
+            System.exit(1);
+        }
+        try {
+            // Load the menuImage texture from "res/images/menuImage.png"
+            texture = TextureLoader.getTexture("PNG", new FileInputStream(new File("res/images/" + textureName + ".png")));
+        } catch (IOException e) {
+            e.printStackTrace();
+            Display.destroy();
+            System.exit(1);
+        }
+//        glMatrixMode(GL_PROJECTION);
+//        glOrtho(0, 640, 480, 0, 1, -1);
+//        glMatrixMode(GL_MODELVIEW);
+        glEnable(GL_TEXTURE_2D);
+        boolean spaceTapped = false;
+        while (!spaceTapped) {
+        	if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){
+     		   Display.destroy();
+            	   System.exit(1);
+     	    }
+     	    if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)){
+     	    	spaceTapped = true;
+     	    }
+            glClear(GL_COLOR_BUFFER_BIT);
+            texture.bind();
+//            glBegin(GL_TRIANGLES);
+//            glTexCoord2f(1, 0);
+//            glVertex2i(450, 10);
+//            glTexCoord2f(0, 0);
+//            glVertex2i(10, 10);
+//            glTexCoord2f(0, 1);
+//            glVertex2i(10, 450);
+//            glTexCoord2f(0, 1);
+//            glVertex2i(10, 450);
+//            glTexCoord2f(1, 1);
+//            glVertex2i(450, 450);
+//            glTexCoord2f(1, 0);
+//            glVertex2i(450, 10);
+//            glEnd();
+                        glBegin(GL_QUADS);
+                        glTexCoord2f(0, 0);
+                        glVertex2i(0, 0); // Upper-left
+                        glTexCoord2f(1, 0);
+                        glVertex2i(1850, 0); // Upper-right
+                        glTexCoord2f(1, 1);
+                        glVertex2i(1850, 1850); // Bottom-right
+                        glTexCoord2f(0, 1);
+                        glVertex2i(0,1850 ); // Bottom-left
+                        glEnd();
+            Display.update();
+            Display.sync(60);
+        }
+        // Release the resources of the menuImage texture
+        texture.release();
+    }
+    
 	public static void playGame(){
 		render();
 		logic(getDelta());
@@ -56,7 +121,7 @@ public class TronGame {
 	}
 	
 	public static void endGame() {
-		
+		gameState = 1;
 	}
 
     private static void input() {
@@ -68,6 +133,8 @@ public class TronGame {
     			Keyboard.isKeyDown(Keyboard.KEY_L), Keyboard.isKeyDown(Keyboard.KEY_J));
     	bikes.get(3).drive(Keyboard.isKeyDown(Keyboard.KEY_T), Keyboard.isKeyDown(Keyboard.KEY_G),
     			Keyboard.isKeyDown(Keyboard.KEY_H), Keyboard.isKeyDown(Keyboard.KEY_F));
+    	bikes.get(4).drive(Keyboard.isKeyDown(Keyboard.KEY_NUMPAD5), Keyboard.isKeyDown(Keyboard.KEY_NUMPAD2),
+    			Keyboard.isKeyDown(Keyboard.KEY_NUMPAD3), Keyboard.isKeyDown(Keyboard.KEY_NUMPAD1));
     }
 
     private static long getTime() {
@@ -84,7 +151,7 @@ public class TronGame {
     private static void setUpDisplay() {
         try {
             Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
-            Display.setTitle("LightBike");
+            Display.setTitle("Tron Light Bike");
             Display.create();
         } catch (LWJGLException e) {
             e.printStackTrace();
@@ -110,10 +177,11 @@ public class TronGame {
 
     private static void setUpEntities() {
         bikes = new ArrayList<Bike>(0);
-    	bikes.add(new Bike(300, 200, BIKE_SIZE, BIKE_SIZE, 1.0f, 1.0f, 1.0f, 2, "RIGHT", "White Bike"));
-        bikes.add(new Bike(300, 700, BIKE_SIZE, BIKE_SIZE, 0.9568f, 0.7882f, 0.1058f, 2, "UP", "Yellow Bike"));
-        bikes.add(new Bike(800, 700, BIKE_SIZE, BIKE_SIZE, 0.4784f, 1.0f, 0.9843f, 2, "LEFT", "Blue Bike"));
-        bikes.add(new Bike(800, 200, BIKE_SIZE, BIKE_SIZE, 0.2235f, 1.0f, 0.0784f, 2, "DOWN", "Green Bike"));
+    	bikes.add(new Bike(300, 200, BIKE_SIZE, BIKE_SIZE, 1.0f, 0.0f, 0.5529f, 2, "RIGHT", "Purple"));
+        bikes.add(new Bike(300, 700, BIKE_SIZE, BIKE_SIZE, 0.9568f, 0.7882f, 0.1058f, 2, "UP", "Yellow"));
+        bikes.add(new Bike(800, 700, BIKE_SIZE, BIKE_SIZE, 0.4784f, 1.0f, 0.9843f, 2, "LEFT", "Blue"));
+        bikes.add(new Bike(800, 200, BIKE_SIZE, BIKE_SIZE, 0.2235f, 1.0f, 0.0784f, 2, "DOWN", "Green"));
+        bikes.add(new Bike(500, 500, BIKE_SIZE, BIKE_SIZE, 1.0f, 0.0f, 0.0f, 2, "UP", "Red"));
     }
 
     private static void setUpTimer() {
@@ -161,9 +229,9 @@ public class TronGame {
 		if(alive < 2) {
 			gameState = 3;
 			if(alive == 1) {
-				System.out.println("Winner!!!! Good Job " + winner);
+				displayScreen(winner);
 			} else {
-				System.out.println("No Winners this time");
+				displayScreen("NoWinners");
 			}
 		}
 	}

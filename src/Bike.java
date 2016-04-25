@@ -18,7 +18,7 @@ public class Bike extends AbstractMovingEntity {
 	private String oldDirection;
 	private boolean isAlive;
 	private boolean speeding;
-	private String name;
+	private String colorString;
 
 	public Bike(double x, double y, double width, double height, float r, float g, float b, int lightTrailThicknessIn, String directionIn, String n) {
 		super(x, y, width, height, r, g, b);
@@ -31,11 +31,11 @@ public class Bike extends AbstractMovingEntity {
 		changedDirection = false;
 		setUpInitialSettings(directionIn);
 		speeding = false;
-		name = n;
+		colorString = n;
 	}
 	
 	public String getName(){
-		return name;
+		return colorString;
 	}
 	
 	private void setUpInitialSettings(String dIn) {
