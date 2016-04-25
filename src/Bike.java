@@ -18,8 +18,9 @@ public class Bike extends AbstractMovingEntity {
 	private String oldDirection;
 	private boolean isAlive;
 	private boolean speeding;
+	private String name;
 
-	public Bike(double x, double y, double width, double height, float r, float g, float b, int lightTrailThicknessIn, String directionIn) {
+	public Bike(double x, double y, double width, double height, float r, float g, float b, int lightTrailThicknessIn, String directionIn, String n) {
 		super(x, y, width, height, r, g, b);
 		LT_THICKNESS = lightTrailThicknessIn;
 		isAlive = true;
@@ -30,6 +31,11 @@ public class Bike extends AbstractMovingEntity {
 		changedDirection = false;
 		setUpInitialSettings(directionIn);
 		speeding = false;
+		name = n;
+	}
+	
+	public String getName(){
+		return name;
 	}
 	
 	private void setUpInitialSettings(String dIn) {
@@ -68,6 +74,7 @@ public class Bike extends AbstractMovingEntity {
 	@Override
 	public void draw() {
 		if(isAlive) {
+			glDisable(GL_TEXTURE_2D);
 			glColor3f(getR(), getG(), getB());
 			glRectd(getX(), getY(), getX() + getWidth(), getY() + getHeight());
 		}
@@ -250,6 +257,7 @@ public class Bike extends AbstractMovingEntity {
 
 	public void drawLightTrails() {
 		if(isAlive) {
+			glDisable(GL_TEXTURE_2D);
 			for(Trail trail: lightTrail) {
 				trail.draw();
 			}
