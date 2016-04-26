@@ -233,6 +233,7 @@ public class TronGame {
 			} else {
 				displayScreen("NoWinners");
 			}
+			endGame();
 		}
 	}
 }
