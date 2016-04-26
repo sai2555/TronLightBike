@@ -6,21 +6,66 @@ import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.opengl.*;
-
+/**
+ * Bike Class that extends Abstract Moving Entity
+ * @author Sai Maddhi
+ *
+ */
 public class Bike extends AbstractMovingEntity {
-
+	/**
+	 * holds the light trails of the bike
+	 */
 	private ArrayList<Trail> lightTrail;
+	/**
+	 * the current light trail being manipulated
+	 */
 	private int currentLT;
+	/**
+	 * true if bike is traveling up or down
+	 */
 	private boolean upDown;
+	/**
+	 * the thickness of the light trail
+	 */
 	private final int LT_THICKNESS;
+	/**
+	 * true if bike recently changed direction
+	 */
 	private boolean changedDirection;
+	/**
+	 * The current direction of the bike
+	 */
 	private String direction;
+	/**
+	 * The old direction the bike was moving in
+	 */
 	private String oldDirection;
+	/**
+	 * true if bike is alive
+	 */
 	private boolean isAlive;
+	/**
+	 * true if bike is moving twice the speed
+	 */
 	private boolean speeding;
+	/**
+	 * The name of the color of the bike
+	 */
 	private String colorString;
-
-	public Bike(double x, double y, double width, double height, float r, float g, float b, int lightTrailThicknessIn, String directionIn, String n) {
+	/**
+	 * The bike constructor
+	 * @param x the x coord
+	 * @param y the y coor
+	 * @param width the width
+	 * @param height the height
+	 * @param r the r value of the color
+	 * @param g the g value of the color
+	 * @param b the b value of the color
+	 * @param lightTrailThicknessIn the light trail thickness
+	 * @param directionIn the direction to start traveling in
+	 * @param colorStringIn the name of the color
+	 */
+	public Bike(double x, double y, double width, double height, float r, float g, float b, int lightTrailThicknessIn, String directionIn, String colorStringIn) {
 		super(x, y, width, height, r, g, b);
 		LT_THICKNESS = lightTrailThicknessIn;
 		isAlive = true;
@@ -31,13 +76,19 @@ public class Bike extends AbstractMovingEntity {
 		changedDirection = false;
 		setUpInitialSettings(directionIn);
 		speeding = false;
-		colorString = n;
+		colorString = colorStringIn;
 	}
-	
+	/**
+	 * returns the name of the color string
+	 * @return the color string
+	 */
 	public String getName(){
 		return colorString;
 	}
-	
+	/**
+	 * The 
+	 * @param dIn
+	 */
 	private void setUpInitialSettings(String dIn) {
 		switch(dIn) {
 		case "DOWN":

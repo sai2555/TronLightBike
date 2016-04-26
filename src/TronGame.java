@@ -177,8 +177,8 @@ public class TronGame {
 
     private static void setUpEntities() {
         bikes = new ArrayList<Bike>(0);
-    	bikes.add(new Bike(300, 200, BIKE_SIZE, BIKE_SIZE, 1.0f, 0.0f, 0.5529f, 2, "RIGHT", "Purple"));
-        bikes.add(new Bike(300, 700, BIKE_SIZE, BIKE_SIZE, 0.9568f, 0.7882f, 0.1058f, 2, "UP", "Yellow"));
+    	bikes.add(new Bike(300, 200, BIKE_SIZE, BIKE_SIZE, 1.0f, 0.6471f, 0.0f, 2, "RIGHT", "Orange"));
+        bikes.add(new Bike(300, 700, BIKE_SIZE, BIKE_SIZE, 0.8549f, 1.0f, 0.0f, 2, "UP", "Yellow"));
         bikes.add(new Bike(800, 700, BIKE_SIZE, BIKE_SIZE, 0.4784f, 1.0f, 0.9843f, 2, "LEFT", "Blue"));
         bikes.add(new Bike(800, 200, BIKE_SIZE, BIKE_SIZE, 0.2235f, 1.0f, 0.0784f, 2, "DOWN", "Green"));
         bikes.add(new Bike(500, 500, BIKE_SIZE, BIKE_SIZE, 1.0f, 0.0f, 0.0f, 2, "UP", "Red"));
@@ -231,7 +231,7 @@ public class TronGame {
 			if(alive == 1) {
 				displayScreen(winner);
 			} else {
-				displayScreen("NoWinners");
+				displayScreen("Tie");
 			}
 			endGame();
 		}
