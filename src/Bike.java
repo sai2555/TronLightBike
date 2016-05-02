@@ -8,7 +8,7 @@ import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.opengl.*;
 /**
  * Bike Class that extends Abstract Moving Entity
- * @author Sai Maddhi
+ * @author Sai Maddhi, Leon Shen, Max Topleson
  *
  */
 public class Bike extends AbstractMovingEntity {
@@ -82,61 +82,83 @@ public class Bike extends AbstractMovingEntity {
 	 * returns the name of the color string
 	 * @return the color string
 	 */
-	public String getName(){
+	public String getColorName(){
 		return colorString;
 	}
 	/**
-	 * The 
+	 * The method that positions the bikes in their initial positions with their initial colors
 	 * @param dIn
 	 */
 	private void setUpInitialSettings(String dIn) {
-		switch(dIn) {
+		switch(dIn) {//Depending on the direction that the bike was constructed with, set up the bikes
 		case "DOWN":
 			setDY(0.1);
-			setDX(0.0);
-			upDown = true;
+			setDX(0.0);//set the bike going down
+			upDown = true;// bike is moving up and down so it is set to true
 			lightTrail.add(new Trail(getX() + getWidth() / 2 - LT_THICKNESS / 2,
-					getY() + getHeight() / 2 + LT_THICKNESS / 2, LT_THICKNESS, 0, getR(), getG(), getB()));
+					getY() + getHeight() / 2 + LT_THICKNESS / 2, LT_THICKNESS, 0, getR(), getG(), getB()));//make a new light trail in the 
+					// direction that the bike is currently traveling in which is down
 			break;
 		case "UP":
 			setDY(-0.1);
-			setDX(0.0);
-			upDown = true;
+			setDX(0.0);//Set the bike going up
+			upDown = true;// updown is true because it is traveling up
 			lightTrail.add(new Trail(getX() + getWidth() / 2 - LT_THICKNESS / 2,
-					getY() + getHeight() / 2 + LT_THICKNESS / 2, LT_THICKNESS, 0, getR(), getG(), getB()));
+					getY() + getHeight() / 2 + LT_THICKNESS / 2, LT_THICKNESS, 0, getR(), getG(), getB()));//make a new light trail in the 
+			// direction that the bike is currently traveling in which is up
 			break;
 		case "RIGHT":
 			setDX(0.1);
-			setDY(0.0);
-			upDown = false;
+			setDY(0.0);//sets the bike going right
+			upDown = false;//Since it is traveling right, upDown is false
 			lightTrail.add(new Trail(getX() + getWidth() / 2 - LT_THICKNESS / 2,
-					getY() + getHeight() / 2 - LT_THICKNESS, 0, LT_THICKNESS, getR(), getG(), getB()));
+					getY() + getHeight() / 2 - LT_THICKNESS, 0, LT_THICKNESS, getR(), getG(), getB()));//make a new light trail in the 
+			// direction that the bike is currently traveling in which is right
 			break;
 		default:
 			setDX(-0.1);
-			setDY(0.0);
-			upDown = false;
+			setDY(0.0);//Set the bike going left
+			upDown = false;//Since it is traveling left, upDown is false
 			lightTrail.add(new Trail(getX() + getWidth() / 2 + LT_THICKNESS / 2,
-					getY() + getHeight() / 2 - LT_THICKNESS / 2, 0, LT_THICKNESS, getR(), getG(), getB()));
+					getY() + getHeight() / 2 - LT_THICKNESS / 2, 0, LT_THICKNESS, getR(), getG(), getB()));//make a new light trail in the 
+			// direction that the bike is currently traveling in which is left
 			break;
 		}
 	}
 
 	@Override
+	/**
+	 * Draws the bike
+	 */
 	public void draw() {
 		if(isAlive) {
 			glDisable(GL_TEXTURE_2D);
 			glColor3f(getR(), getG(), getB());
-			glRectd(getX(), getY(), getX() + getWidth(), getY() + getHeight());
+			glRectd(getX(), getY(), getX() + getWidth(), getY() + getHeight());//Draws a rectangle for the bike
+			glColor3f(0,0,0);
 		}
 	}
-
+	/**
+	 * Drives the bike according to the keyboard inputs
+	 * @param up true if the user clicked the up control
+	 * @param down true if the user clicked the down control
+	 * @param right true if the user clicked the right control
+	 * @param left true if the user clicked the right control
+	 */
 	public void drive(boolean up, boolean down, boolean right, boolean left) {
-		if(!up && !down && !right && !left) return;
+		if(!up && !down && !right && !left) return;//If no controls were clicked, dont change the bikes direction
 		if(isAlive) {
+			/*
+			 * Only let the user drive the bike in a certain direction if the bike has traveled at least more than the width of the light
+			 * trail. If the user clicks left and he was traveling 
+			 */
 			if(((direction.equals("UP") || direction.equals("DOWN")) && lightTrail.get(currentLT).getHeight() > getWidth() / 2) || 
 					(((direction.equals("RIGHT") || direction.equals("LEFT")) && lightTrail.get(currentLT).getWidth() > getWidth() / 2))) {
-				if (up || down) {
+				if (up || down) {//If user wants to move bike up or down
+					/*
+					 * If bike was not going down, make bike go up; if it was already going up, make the bike go faster if it is not speeding
+					 * and slower if it is speeding
+					 */
 					if (up && !direction.equals("DOWN")) {
 						if(direction.equals("UP")) {
 							if(speeding) {
@@ -156,6 +178,10 @@ public class Bike extends AbstractMovingEntity {
 							direction = "UP";
 						}
 					} else if (down && !direction.equals("UP")) {
+						/*
+						 * User can only make bike go down if it was not going up; if it is going down already, have it speed based on
+						 * whether it was speeding or not.
+						 */
 						if(direction.equals("DOWN")) {
 							if(speeding) {
 								setDX(0);
@@ -177,6 +203,10 @@ public class Bike extends AbstractMovingEntity {
 					changedDirection = (!upDown) ? true : false;
 					upDown = true;
 				} else if(left || right) {
+					/*
+					 * User can only go right if they were not going left; if already going right, have bike speed based on whether it was
+					 * speeding or not
+					 */
 					if (right && !direction.equals("LEFT")) {
 						if(direction.equals("RIGHT")) {
 							if(speeding) {
@@ -196,6 +226,9 @@ public class Bike extends AbstractMovingEntity {
 							direction = "RIGHT";
 						}
 					} else if (left && !direction.equals("RIGHT")) {
+						/*
+						 * Bike can only go left if not going right; if already going left, have bike speed based on whether it was speeding
+						 */
 						if(direction.equals("LEFT")) {
 							if(speeding) {
 								setDY(0);
@@ -222,21 +255,27 @@ public class Bike extends AbstractMovingEntity {
 	}
 
 	@Override
+	/**
+	 * Updates the light trails if the direction is not changed
+	 * If the direction is changed then a new light trail will be made 
+	 */
 	public void update(int delta) {
-		if(isAlive) {
+		if(isAlive) { //Checks if the bike is not dead 
 			super.update(delta);
-			if(changedDirection) {
+			if(changedDirection) { //If the bike changes directions then a new light trail will be formed 
 				makeNewLightTrail();
 			} else {
-				updateLightTrail();
+				updateLightTrail(); //Else it would update the current light trail in the direction it is going in
 			}
-			changedDirection = false;
-			drawLightTrails();
+			changedDirection = false; //if changeDirection was true, then it sets it to false so that another light trail is not created 
+			drawLightTrails(); //Draws the light trail
 		}
 	}
-
+	/**
+	 * This method updates the current light trail of the bike based on the direction it is moving in
+	 */
 	public void updateLightTrail() {
-		if(isAlive) {
+		if(isAlive) { // Checks if the bike is alive
 			Trail lt = lightTrail.get(currentLT);
 			if(direction.equals("UP")) {
 				double distance = lt.getY() - (getY() + getHeight());
@@ -255,11 +294,16 @@ public class Bike extends AbstractMovingEntity {
 			}
 		}
 	}
-
+	/**
+	 * Creates a new light trail
+	 */
 	public void makeNewLightTrail() {
 		if(isAlive) {
 			Trail lt = lightTrail.get(currentLT);
 			currentLT++;
+			/*
+			 * If bike was going up/down/left/right, make a new trail in the new direction
+			 */
 			if(oldDirection.equals("UP")) {
 				double distance = lt.getY() - (getY() + getHeight() / 2);
 				lt.setY(getY() + getHeight() / 2 - LT_THICKNESS);
@@ -305,21 +349,28 @@ public class Bike extends AbstractMovingEntity {
 			}
 		}
 	}
-
+	/**
+	 * Draws the light trails on the screen
+	 */
 	public void drawLightTrails() {
-		if(isAlive) {
-			glDisable(GL_TEXTURE_2D);
+		if(isAlive) { // Checks if the bike is alive
+			glDisable(GL_TEXTURE_2D); // Disables Texture 2D 
 			for(Trail trail: lightTrail) {
 				trail.draw();
 			}
 		}
 	}
-	
+	/**
+	 * "Kills" bike; disables all methods with the if(isAlive) check
+	 */
 	public void die() {
 		isAlive = false;
 	}
 	
 	@Override
+	/**
+	 * Determines if a bike collides with  the boundaries or if it collides with another trail
+	 */
 	public boolean collisionDetection(int screenWidth, int screenHeight) {
 		if(horizontalBoundaryTouches(screenWidth)) {
     		die();
@@ -332,11 +383,17 @@ public class Bike extends AbstractMovingEntity {
     	hitsOwnTrails();
     	return false;
 	}
-	
+	/**
+	 * @return the light trail so it can be used for a different class 
+	 */
 	public ArrayList<Trail> getLightTrail() {
-		return lightTrail;
+		return lightTrail; //Returns lightTrail array list 
 	}
-	
+	/**
+	 * 
+	 * @param trails An Arraylist of trails of the other bike
+	 * @return Changes the state of a bike when it hits another trail
+	 */
 	public boolean hitsOtherTrails(ArrayList<Trail> trails) {
 		for(Trail trail: trails) {
 			if(trail.collidesWith(this)) { 
@@ -346,7 +403,9 @@ public class Bike extends AbstractMovingEntity {
 		}
 		return false;
 	}
-	
+	/**
+	 * If a bike hits its own trail then it dies
+	 */
 	public void hitsOwnTrails() {
 		for(int i = 0; i < currentLT-1; i++) {
 			if(i >= 0) {
@@ -357,7 +416,10 @@ public class Bike extends AbstractMovingEntity {
 			}
 		}
 	}
-	
+	/**
+	 * 
+	 * @return checks if a bike is alive or not 
+	 */
 	public boolean isAlive() { 
 		return isAlive;
 	}
