@@ -24,11 +24,11 @@ public class TronGame {
 	/**
 	 * width of screen
 	 */
-    private static final int WIDTH = 1250;
+    private static final int WIDTH = 1920;
     /**
      * height of screen
      */
-    private static final int HEIGHT = 937;
+    private static final int HEIGHT = 1035;
     /**
      * size of bike
      */
@@ -149,6 +149,8 @@ public class TronGame {
     			Keyboard.isKeyDown(Keyboard.KEY_H), Keyboard.isKeyDown(Keyboard.KEY_F));
     	bikes.get(4).drive(Keyboard.isKeyDown(Keyboard.KEY_NUMPAD5), Keyboard.isKeyDown(Keyboard.KEY_NUMPAD2), //5th bike gets numpad controls
     			Keyboard.isKeyDown(Keyboard.KEY_NUMPAD3), Keyboard.isKeyDown(Keyboard.KEY_NUMPAD1));
+    	bikes.get(5).drive(Keyboard.isKeyDown(Keyboard.KEY_NUMPADEQUALS), Keyboard.isKeyDown(Keyboard.KEY_NUMPAD8), //5th bike gets numpad controls
+    			Keyboard.isKeyDown(Keyboard.KEY_NUMPAD9), Keyboard.isKeyDown(Keyboard.KEY_NUMPAD7));
     }
 
     /**
@@ -201,11 +203,12 @@ public class TronGame {
      */
     private static void setUpEntities() {
         bikes = new ArrayList<Bike>(0);
-    	bikes.add(new Bike(300, 200, BIKE_SIZE, BIKE_SIZE, 1.0f, 0.6471f, 0.0f, 2, "RIGHT", "Orange")); //adds orange bike
-        bikes.add(new Bike(300, 700, BIKE_SIZE, BIKE_SIZE, 0.8549f, 1.0f, 0.1058f, 2, "UP", "Yellow")); //adds yellow bike
-        bikes.add(new Bike(800, 700, BIKE_SIZE, BIKE_SIZE, 0.4784f, 1.0f, 0.9843f, 2, "LEFT", "Blue")); //adds blue bike
-        bikes.add(new Bike(800, 200, BIKE_SIZE, BIKE_SIZE, 0.2235f, 1.0f, 0.0784f, 2, "DOWN", "Green")); //adds green bike
-        bikes.add(new Bike(500, 500, BIKE_SIZE, BIKE_SIZE, 1.0f, 0.0f, 0.0f, 2, "UP", "Red")); //adds red bike
+    	bikes.add(new Bike(WIDTH/7, HEIGHT/2, BIKE_SIZE, BIKE_SIZE, 1.0f, 0.6471f, 0.0f, 2, "DOWN", "Orange")); //adds orange bike
+        bikes.add(new Bike(WIDTH*2/7, HEIGHT/2, BIKE_SIZE, BIKE_SIZE, 0.8549f, 1.0f, 0.1058f, 2, "UP", "Yellow")); //adds yellow bike
+        bikes.add(new Bike(WIDTH*3/7, HEIGHT/2, BIKE_SIZE, BIKE_SIZE, 0.4784f, 1.0f, 0.9843f, 2, "DOWN", "Blue")); //adds blue bike
+        bikes.add(new Bike(WIDTH*4/7, HEIGHT/2, BIKE_SIZE, BIKE_SIZE, 0.2235f, 1.0f, 0.0784f, 2, "UP", "Green")); //adds green bike
+        bikes.add(new Bike(WIDTH*5/7, HEIGHT/2, BIKE_SIZE, BIKE_SIZE, 1.0f, 0.0f, 0.0f, 2, "DOWN", "Red")); //adds red bike
+        bikes.add(new Bike(WIDTH*6/7, HEIGHT/2, BIKE_SIZE, BIKE_SIZE, 1.0f, 1.0f, 1.0f, 2, "UP", "White")); //adds white bike
     }
 
     /**
@@ -276,7 +279,9 @@ public class TronGame {
 				displayScreen("Tie"); //displays that there are no winners
 			}
 			gameState = 1; //sets game state to 1
+			for(Bike bike: bikes) {
+				bike.drawScore();
+			}
 		}
 	}
 }
-

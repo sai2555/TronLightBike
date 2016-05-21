@@ -49,6 +49,10 @@ public class Bike extends AbstractMovingEntity {
 	 */
 	private boolean speeding;
 	/**
+	 * speed of the bikes
+	 */
+	private double speed = 0.1;
+	/**
 	 * The name of the color of the bike
 	 */
 	private String colorString;
@@ -92,7 +96,7 @@ public class Bike extends AbstractMovingEntity {
 	private void setUpInitialSettings(String dIn) {
 		switch(dIn) {//Depending on the direction that the bike was constructed with, set up the bikes
 		case "DOWN":
-			setDY(0.1);
+			setDY(speed);
 			setDX(0.0);//set the bike going down
 			upDown = true;// bike is moving up and down so it is set to true
 			lightTrail.add(new Trail(getX() + getWidth() / 2 - LT_THICKNESS / 2,
@@ -100,7 +104,7 @@ public class Bike extends AbstractMovingEntity {
 					// direction that the bike is currently traveling in which is down
 			break;
 		case "UP":
-			setDY(-0.1);
+			setDY(-speed);
 			setDX(0.0);//Set the bike going up
 			upDown = true;// updown is true because it is traveling up
 			lightTrail.add(new Trail(getX() + getWidth() / 2 - LT_THICKNESS / 2,
@@ -108,7 +112,7 @@ public class Bike extends AbstractMovingEntity {
 			// direction that the bike is currently traveling in which is up
 			break;
 		case "RIGHT":
-			setDX(0.1);
+			setDX(speed);
 			setDY(0.0);//sets the bike going right
 			upDown = false;//Since it is traveling right, upDown is false
 			lightTrail.add(new Trail(getX() + getWidth() / 2 - LT_THICKNESS / 2,
@@ -116,7 +120,7 @@ public class Bike extends AbstractMovingEntity {
 			// direction that the bike is currently traveling in which is right
 			break;
 		default:
-			setDX(-0.1);
+			setDX(-speed);
 			setDY(0.0);//Set the bike going left
 			upDown = false;//Since it is traveling left, upDown is false
 			lightTrail.add(new Trail(getX() + getWidth() / 2 + LT_THICKNESS / 2,
@@ -163,16 +167,16 @@ public class Bike extends AbstractMovingEntity {
 						if(direction.equals("UP")) {
 							if(speeding) {
 								setDX(0);
-								setDY(-.1);
+								setDY(-speed);
 								speeding = false;
 							} else {
 								setDX(0);
-								setDY(-.2);
+								setDY(-speed*2);
 								speeding = true;
 							}
 						} else {
 							setDX(0);
-							setDY(-.1);
+							setDY(-speed);
 							speeding = false;
 							oldDirection = direction;
 							direction = "UP";
@@ -185,16 +189,16 @@ public class Bike extends AbstractMovingEntity {
 						if(direction.equals("DOWN")) {
 							if(speeding) {
 								setDX(0);
-								setDY(.1);
+								setDY(speed);
 								speeding = false;
 							} else {
 								setDX(0);
-								setDY(.2);
+								setDY(speed*2);
 								speeding = true;
 							}
 						} else {
 							setDX(0);
-							setDY(.1);
+							setDY(speed);
 							speeding = false;
 							oldDirection = direction;
 							direction = "DOWN";
@@ -211,16 +215,16 @@ public class Bike extends AbstractMovingEntity {
 						if(direction.equals("RIGHT")) {
 							if(speeding) {
 								setDY(0);
-								setDX(.1);
+								setDX(speed);
 								speeding = false;
 							} else {
 								setDY(0);
-								setDX(.2);
+								setDX(speed*2);
 								speeding = true;
 							}
 						} else {
 							setDY(0);
-							setDX(.1);
+							setDX(speed);
 							speeding = false;
 							oldDirection = direction;
 							direction = "RIGHT";
@@ -232,16 +236,16 @@ public class Bike extends AbstractMovingEntity {
 						if(direction.equals("LEFT")) {
 							if(speeding) {
 								setDY(0);
-								setDX(-.1);
+								setDX(-speed);
 								speeding = false;
 							} else {
 								setDY(0);
-								setDX(-.2);
+								setDX(-speed*2);
 								speeding = true;
 							} 
 						} else {
 							setDY(0);
-							setDX(-.1);
+							setDX(-speed);
 							speeding = false;
 							oldDirection = direction;
 							direction = "LEFT";
@@ -422,5 +426,8 @@ public class Bike extends AbstractMovingEntity {
 	 */
 	public boolean isAlive() { 
 		return isAlive;
+	}
+	public void drawScore() {
+		
 	}
 }
